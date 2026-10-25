@@ -1,0 +1,38 @@
+name: BWI Hourly Parking Scraper
+
+on:
+  schedule:
+    # Runs every 3 hours on the hour (00:00, 03:00, 06:00, etc. UTC)
+    - cron: '0 */3 * * *'
+  workflow_dispatch: # Allows you to manually click "Run" anytime to test it
+
+jobs:
+  scrape-and-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Grants permission to push the CSV update
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4 pytz
+
+      - name: Run Scraper
+        run: python scraper.py
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add bwi_parking_data.csv
+          # Only commit if bwi_parking_data.csv actually changed
+          git commit -m "Update BWI parking data [skip ci]" || exit 0
+          git push
