@@ -2,10 +2,10 @@ name: BWI Hourly Parking Scraper
 
 on:
   schedule:
-    # Runs every 3 hours on the hour (00:00, 03:00, 06:00, etc. UTC)
-    - cron: '0 */3 * * *'
-  workflow_dispatch: # Allows you to manually click "Run" anytime to test it
-
+    # Runs once an hour at the 17th minute (e.g., 1:17, 2:17, 3:17 UTC)
+    - cron: '17 * * * *'
+  workflow_dispatch:
+  
 jobs:
   scrape-and-commit:
     runs-on: ubuntu-latest
