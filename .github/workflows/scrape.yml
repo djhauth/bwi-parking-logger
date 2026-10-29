@@ -2,9 +2,9 @@ name: BWI Hourly Parking Scraper
 
 on:
   schedule:
-    # Runs hourly at the 17th minute
-    - cron: '17 * * * *'
-  workflow_dispatch:
+    # Runs every 20 minutes (e.g., :00, :20, :40 UTC)
+    - cron: '*/20 * * * *'
+  workflow_dispatch: # Allows manual triggering anytime
 
 jobs:
   scrape-and-commit:
